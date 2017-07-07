@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    
+    <!-- Agrega un cliente sin acceder a los métodos de consulta, retiro ni depósito -->
+    <!-- 
+    <bean id="cuentaBean" class="com.beeva.springBankApp.bankapp.dao.model.Cuenta">
+    	<constructor-arg value="6000.00"/>
+    	<constructor-arg value="AHORROS"/>
+    </bean>
+    
+    <bean id="clienteBean" class="com.beeva.springBankApp.bankapp.dao.Cliente">
+    	<constructor-arg value="Ricardo"/>
+    	<constructor-arg value="Castillo"/>
+    	<property name="cuenta" ref="cuentaBean"/>
+    </bean>
+    
+    <bean id="inyector" class="com.beeva.springBankApp.bankapp.dao.Inyector" init-method="Inyecta" scope="prototype">
+    	<property name="cliente" ref="clienteBean"/>
+    </bean>
+     -->
+     
+     <bean id="cuentaB" class="com.beeva.springBankApp.bankapp.dao.model.Cuenta">
+    	<constructor-arg value="6000.00"/>
+    	<constructor-arg value="AHORROS"/>
+    </bean>
+     
+     <bean id="clienteB" class="com.beeva.springBankApp.bankapp.dao.Cliente">
+    	<constructor-arg value="Ricardo"/>
+    	<constructor-arg value="Castillo"/>
+    	<constructor-arg ref="cuentaB"/>
+    </bean>
+     
+     <bean id="bancoB" class="com.beeva.springBankApp.bankapp.dao.Banco"/>
+     
+     <!-- Agrega Cliente -->
+     <bean id="prueba" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+     	<property name="targetObject" ref="bancoB"/>
+     	<property name="targetMethod" value="addCliente"/>
+     	<property name="arguments" ref="clienteB"/>
+     </bean>
+     
+     <!-- Consulta Saldo -->
+     <bean id="prueba2" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+     	<property name="targetObject" ref="bancoB"/>
+     	<property name="targetMethod" value="getCliente"/>
+     	<property name="arguments" value="0"/>
+     </bean>
+     
+     <!-- Retiro -->
+     <bean id="clienteRetiro" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+     	<property name="targetObject" ref="bancoB"/>
+     	<property name="targetMethod" value="getCliente"/>
+     	<property name="arguments" value="0"/>
+     </bean>
+     
+     <bean id="retiroArgs" class="com.beeva.springBankApp.bankapp.dao.Banco">
+    	<constructor-arg value="clienteRetiro"/>
+    	<constructor-arg value="500.00"/>
+    </bean>
+     
+     <bean id="cuentaDAOB" class="com.beeva.springBankApp.bankapp.dao.impl.CuentaDAOImplAhorro"/>
+     
+     <bean id="prueba3" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+     	<property name="targetObject" ref="cuentaDAOB"/>
+     	<property name="targetMethod" value="retiro"/>
+     	<property name="arguments" ref="retiroArgs"/>
+     </bean>
+     
+  <context:annotation-config />
+
+  <!-- bean declaration go here -->
+
+</beans>

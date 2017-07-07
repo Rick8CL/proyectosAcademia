@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Built-By: administradorcito
+Build-Jdk: 1.8.0_131
+Main-Class: com.maventest.App
+Created-By: Maven Integration for Eclipse
+
