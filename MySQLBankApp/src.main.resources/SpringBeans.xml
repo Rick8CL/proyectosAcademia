@@ -10,22 +10,22 @@
     <!-- Agrega un cliente sin acceder a los métodos de consulta, retiro ni depósito -->
     
     <bean id="cuentaBean" class="com.beeva.mysql.bankapp.dao.model.Cuenta">
-    	<constructor-arg value="20.00"/>
-    	<constructor-arg value="CHEQUES"/>
+    	<constructor-arg value="80000.00"/>
+    	<constructor-arg value="AHORROS"/>
     </bean>
     
     <bean id="clienteBean" class="com.beeva.mysql.bankapp.dao.Cliente">
-    	<constructor-arg value="Peter"/>
-    	<constructor-arg value="Parker"/>
+    	<constructor-arg value="Nick"/>
+    	<constructor-arg value="Fury"/>
     	<property name="cuenta" ref="cuentaBean"/>
     </bean>
 
     
     <bean id="inserta" class="com.beeva.mysql.bankapp.dao.JDBCUtils" init-method="insertarCliente" scope="prototype">
     	<property name="cliente" ref="clienteBean"/>
-    	<property name="idcliente" value="16"/>
-    	<property name="idbanco" value="1"/>
-    	<property name="idtipocuenta" value="2"/>
+    	<property name="idcliente" value="17"/>
+    	<property name="idbanco" value="2"/>
+    	<property name="idtipocuenta" value="1"/>
     </bean>
      
   <context:annotation-config />
