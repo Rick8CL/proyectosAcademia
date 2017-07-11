@@ -4,5 +4,5 @@ import com.beeva.ultimate.elbanco.dao.model.Banco;
 
 public abstract class BancoDAO {
 	public abstract void save(Banco banco);
-	public abstract void getBancoById(int id);
+	public abstract Banco getBancoById(int id);
 }

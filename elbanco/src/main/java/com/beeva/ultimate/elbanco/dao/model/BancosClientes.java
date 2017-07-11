@@ -7,11 +7,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="banco")
-public class Banco {
+@Table(name="bancosclientes")
+public class BancosClientes {
 
-    private int id;
-	private String nombre;
+    private int id, idcliente, idbanco;
     
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -23,11 +22,19 @@ public class Banco {
 		this.id = id;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public int getIdcliente() {
+		return idcliente;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setIdcliente(int idcliente) {
+		this.idcliente = idcliente;
+	}
+
+	public int getIdbanco() {
+		return idbanco;
+	}
+
+	public void setIdbanco(int idbanco) {
+		this.idbanco = idbanco;
 	}
 }

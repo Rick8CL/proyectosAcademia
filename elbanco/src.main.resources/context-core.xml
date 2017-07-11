@@ -19,7 +19,7 @@
     <tx:annotation-driven/>
     <bean id="beanConexion" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/bancodb"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/bankapp"/>
         <property name="username" value="root"/>
         <property name="password" value="toor"/>
     </bean>
@@ -29,7 +29,7 @@
     	 <property name="persistenceUnitName" value="persBanco"/>
     </bean>
     
-    <bean id="beanTM" class="org.springframework.orm.jpa.JpaTransactionManager">
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
     	<property name="entityManagerFactory" ref="beanEMF" />
     </bean>
 

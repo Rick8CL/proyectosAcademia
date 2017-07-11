@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.beeva.ultimate.elbanco.dao.inter.ClienteDAO;
 import com.beeva.ultimate.elbanco.dao.model.Cliente;
+import com.beeva.ultimate.elbanco.dao.model.Cuenta;
 
 @Repository
 public class ClienteDAOImpl extends ClienteDAO {
@@ -16,14 +17,14 @@ public class ClienteDAOImpl extends ClienteDAO {
 
 	@Override
 	@Transactional
-	public void save(Cliente cliente, double dinero) {
-		// TODO Auto-generated method stub
+	public void save(Cliente cliente) {
+		em.persist(cliente);
 		
 	}
 
 	@Override
-	public void getClienteById(Cliente cliente, double dinero) {
-		// TODO Auto-generated method stub
+	public Cliente getClienteById(int id) {
+		return em.find(Cliente.class, id);
 		
 	}
 	

@@ -10,9 +10,8 @@ import javax.persistence.Table;
 @Table(name="cuenta")
 public class Cuenta {
 	
-	protected int id;
+	protected int id, idcliente, idtipocuenta;
     protected double balance;
-    protected String tipoCuenta;
     
     @Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -32,12 +31,21 @@ public class Cuenta {
 		this.balance = balance;
 	}
 
-	public String getTipoCuenta() {
-		return tipoCuenta;
+	public int getIdcliente() {
+		return idcliente;
 	}
 
-	public void setTipoCuenta(String tipoCuenta) {
-		this.tipoCuenta = tipoCuenta;
+	public void setIdcliente(int idcliente) {
+		this.idcliente = idcliente;
 	}
-    
+
+	public int getIdtipocuenta() {
+		return idtipocuenta;
+	}
+
+	public void setIdtipocuenta(int idtipocuenta) {
+		this.idtipocuenta = idtipocuenta;
+	}
+
+	
 }

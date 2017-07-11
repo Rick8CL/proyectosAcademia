@@ -2,24 +2,31 @@ package com.beeva.ultimate.elbanco.dao.impl;
 
 import java.util.Date;
 
-import com.beeva.ultimate.elbanco.dao.model.Cliente;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.transaction.annotation.Transactional;
+
+import com.beeva.ultimate.elbanco.dao.model.Cuenta;
 import com.beeva.ultimate.elbanco.dao.inter.CuentaDAO;
 
-public class CuentaDAOImplCheques implements CuentaDAO {
-
-	public boolean deposito(Cliente cliente, double dinero) {
+public class CuentaDAOImplCheques extends CuentaDAO {
+	@PersistenceContext
+	EntityManager em;
+	
+	public boolean deposito(Cuenta cuenta, double dinero) {
 		boolean flag=false;
-		double saldo=cliente.getCuenta().getBalance();
+		double saldo=cuenta.getBalance();
 		saldo = saldo + dinero;
-		cliente.getCuenta().setBalance(saldo);
+		cuenta.setBalance(saldo);
 		flag = true;
 		return flag;
 	}
 
-	public boolean retiro(Cliente cliente, double dinero) {
+	public boolean retiro(Cuenta cuenta, double dinero) {
 		boolean flag=false;
 		int dia=0;
-		double saldo=cliente.getCuenta().getBalance();
+		double saldo=cuenta.getBalance();
 		Date hoy = new Date();
 		
 		dia=hoy.getDay();
@@ -30,11 +37,22 @@ public class CuentaDAOImplCheques implements CuentaDAO {
 			flag=false;
 		}else{
 			saldo = saldo - dinero;
-			cliente.getCuenta().setBalance(saldo);
+			cuenta.setBalance(saldo);
 			flag=true;
 		}
 		
 		return flag;
+	}
+
+	@Transactional
+	public void save(Cuenta cuenta) {
+		em.persist(cuenta);
+		
+	}
+
+	public Cuenta getCuentaById(int id) {
+		
+		return em.find(Cuenta.class, id);
 	}
 	
 }

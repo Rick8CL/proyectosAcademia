@@ -11,9 +11,9 @@ import com.beeva.ultimate.elbanco.dao.model.Cuenta;
 @Entity
 @Table(name="cliente")
 public class Cliente{
+	
 	private int id;
 	private String nombre, apellido;
-	private Cuenta cuenta;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -43,12 +43,4 @@ public class Cliente{
 		return apellido;
 	}
 
-	public Cuenta getCuenta(){
-		return cuenta;
-	}
-
-	public Cuenta setCuenta(Cuenta cuenta){
-		this.cuenta=cuenta;
-		return cuenta;
-	}
 }

@@ -7,10 +7,10 @@ import com.beeva.ultimate.elbanco.dao.model.Cuenta;
 
 public class CuentaFactory {
 	public CuentaDAO getImp(Cuenta cu){
-		if(cu.getTipoCuenta().equals("AHORROS")){
+		if(cu.getIdtipocuenta()==1){
 			CuentaDAO cuentaDAO = new CuentaDAOImplAhorro();
 			return cuentaDAO;
-		}else if(cu.getTipoCuenta().equals("CHEQUES")){
+		}else if(cu.getIdtipocuenta()==2){
 			CuentaDAO cuentaDAO = new CuentaDAOImplCheques();
 			return cuentaDAO;
 		}else{

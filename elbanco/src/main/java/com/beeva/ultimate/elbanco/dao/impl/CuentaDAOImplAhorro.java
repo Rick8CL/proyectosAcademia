@@ -1,30 +1,51 @@
 package com.beeva.ultimate.elbanco.dao.impl;
 
-import com.beeva.ultimate.elbanco.dao.model.Cliente;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.beeva.ultimate.elbanco.dao.model.Cuenta;
 import com.beeva.ultimate.elbanco.dao.inter.CuentaDAO;
 
-public class CuentaDAOImplAhorro implements CuentaDAO {
+@Repository
+public class CuentaDAOImplAhorro extends CuentaDAO {
 
-	public boolean deposito(Cliente cliente, double dinero) {
+	@PersistenceContext
+	EntityManager em;
+	
+	public boolean deposito(Cuenta cuenta, double dinero) {
 		boolean flag=false;
-		double saldo=cliente.getCuenta().getBalance();
+		double saldo=cuenta.getBalance();
 		saldo = saldo + dinero;
-		cliente.getCuenta().setBalance(saldo);
+		cuenta.setBalance(saldo);
 		flag = true;
 		return flag;
 	}
 
-	public boolean retiro(Cliente cliente, double dinero) {
+	public boolean retiro(Cuenta cuenta, double dinero) {
 		boolean flag=false;
-		double saldo=cliente.getCuenta().getBalance();
+		double saldo=cuenta.getBalance();
 		saldo = saldo - dinero;
 		if(saldo<5000){
 			System.out.println("No puedes tener menos de $5000");
 			flag=false;
 		}else{
-			cliente.getCuenta().setBalance(saldo);
+			cuenta.setBalance(saldo);
 			flag=true;
 		}
 		return flag;
+	}
+
+	@Transactional
+	public void save(Cuenta cuenta) {
+		em.persist(cuenta);
+		
+	}
+
+	public Cuenta getCuentaById(int id) {
+		
+		return em.find(Cuenta.class, id);
 	}
 }
