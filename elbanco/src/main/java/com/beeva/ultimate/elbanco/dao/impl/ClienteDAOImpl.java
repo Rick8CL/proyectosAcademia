@@ -24,10 +24,8 @@ public class ClienteDAOImpl extends ClienteDAO {
 
 	@Override
 	public Cliente getClienteById(int id) {
-		return em.find(Cliente.class, id);
-		
+		Cliente c = (Cliente) em.find(Cliente.class, id);
+		return c;
 	}
-	
-	
 
 }

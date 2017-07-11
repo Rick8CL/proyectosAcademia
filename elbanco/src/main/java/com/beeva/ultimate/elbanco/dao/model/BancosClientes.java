@@ -10,16 +10,16 @@ import javax.persistence.Table;
 @Table(name="bancosclientes")
 public class BancosClientes {
 
-    private int id, idcliente, idbanco;
+    private int idbancosclientes, idcliente, idbanco;
     
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-    public int getId() {
-		return id;
+    public int getIdbancosclientes() {
+		return idbancosclientes;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setIdbancosclientes(int idbancosclientes) {
+		this.idbancosclientes = idbancosclientes;
 	}
 
 	public int getIdcliente() {

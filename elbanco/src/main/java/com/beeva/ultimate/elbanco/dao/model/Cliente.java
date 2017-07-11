@@ -12,17 +12,17 @@ import com.beeva.ultimate.elbanco.dao.model.Cuenta;
 @Table(name="cliente")
 public class Cliente{
 	
-	private int id;
+	private int idcliente;
 	private String nombre, apellido;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public int getId() {
-		return id;
+	public int getIdcliente() {
+		return idcliente;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setIdcliente(int idcliente) {
+		this.idcliente = idcliente;
 	}
 
 	public String getNombre(){

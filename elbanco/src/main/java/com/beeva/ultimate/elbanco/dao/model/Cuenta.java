@@ -10,17 +10,17 @@ import javax.persistence.Table;
 @Table(name="cuenta")
 public class Cuenta {
 	
-	protected int id, idcliente, idtipocuenta;
+	protected int idcuenta, idcliente, idtipocuenta;
     protected double balance;
     
     @Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public int getId() {
-		return id;
+	public int getIdcuenta() {
+		return idcuenta;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setIdcuenta(int idcuenta) {
+		this.idcuenta = idcuenta;
 	}
 
 	public double getBalance() {

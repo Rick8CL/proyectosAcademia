@@ -1,0 +1,21 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/data/mongo
+    http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    
+    <bean id="mongoBean" class="com.beeva.otromongo.mongotest.MongoUtils"  init-method="insertar" scope="prototype">
+    	<property name="host" value="127.0.0.1"/>
+    	<property name="puerto" value="27017"/>
+    	<property name="dbname" value="testdb"/>
+    	<property name="collection" value="user"/>
+    	<property name="nombre" value="Maria"/>
+    	<property name="edad" value="35"/>
+    </bean>
+
+</beans>

@@ -10,17 +10,17 @@ import javax.persistence.Table;
 @Table(name="banco")
 public class Banco {
 
-    private int id;
+    private int idbanco;
 	private String nombre;
     
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-    public int getId() {
-		return id;
+    public int getIdbanco() {
+		return idbanco;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setIdbanco(int idbanco) {
+		this.idbanco = idbanco;
 	}
 
 	public String getNombre() {
