@@ -1,14 +1,20 @@
 package com.beeva.ultimate.elbanco;
 
+import java.util.List;
 import java.util.Scanner;
+
+import javax.persistence.Query;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.beeva.ultimate.elbanco.dao.factory.CuentaFactory;
+import com.beeva.ultimate.elbanco.dao.inter.BancoDAO;
 import com.beeva.ultimate.elbanco.dao.inter.BancosClientesDAO;
 import com.beeva.ultimate.elbanco.dao.inter.ClienteDAO;
 import com.beeva.ultimate.elbanco.dao.inter.CuentaDAO;
 import com.beeva.ultimate.elbanco.dao.impl.ClienteDAOImpl;
+import com.beeva.ultimate.elbanco.dao.model.Banco;
 import com.beeva.ultimate.elbanco.dao.model.BancosClientes;
 import com.beeva.ultimate.elbanco.dao.model.Cliente;
 import com.beeva.ultimate.elbanco.dao.model.Cuenta;
@@ -22,6 +28,7 @@ public class App {
         ClienteDAO clientedao = (ClienteDAO) context.getBean(ClienteDAOImpl.class);
         CuentaDAO cuentadao = (CuentaDAO) context.getBean(CuentaDAO.class);
         BancosClientesDAO bcdao = (BancosClientesDAO) context.getBean(BancosClientesDAO.class);
+        BancoDAO bancodao = (BancoDAO) context.getBean(BancoDAO.class);
         
         
         Cliente cli = new Cliente();
@@ -46,6 +53,8 @@ public class App {
         bc.setIdcliente(1);
         bcdao.save(bc);
         */
+
+        Banco b = new Banco();
         
         //cli = clientedao.getClienteById(1);
         //System.out.println(cli.getNombre());
@@ -126,24 +135,27 @@ public class App {
                         x = lector.nextInt();
                         if (clientedao.getClienteById(x)!=null) {
                         	cli = clientedao.getClienteById(x);
-                        	cu = cuentadao.getCuentaById(x);
-                        	bc = bcdao.getBancosclientesById(x);
-                            System.out.println("Cliente encontrado: " + cli.getNombre()+" "+cli.getApellido()+" del Banco "+bc.getIdbanco());
+                        	bc = bcdao.getIdBancoByIdCliente(x);
+                        	b = bancodao.getBancoById(bc.getIdbanco());
+                            System.out.println("Cliente encontrado: " + cli.getNombre()+" "+cli.getApellido()+" del Banco "+b.getNombre());
                         } else {
                             System.out.println("Cliente no Encontrado");
                         }
                         break;
-                    /*    
+                        
                     case 3:
-                        System.out.println("Actualmente hay " + b.getClientes() + " clientes en el banco");
+                    	
+                    	System.out.println("Actualmente hay " + clientedao.getNClientes() + " clientes en el banco");
                         break;
                         
                     case 4:
                     	lector = new Scanner(System.in);
                     	System.out.println("Numero de Cliente:");
                         x = lector.nextInt();
-                        if (b.getCliente(x)!=null) {
-                            System.out.println("Cliente: " + b.getCliente(x).getNombre() + " con un saldo de: $" + b.getCliente(x).getCuenta().getBalance());
+                        if (clientedao.getClienteById(x)!=null) {
+                        	cli = clientedao.getClienteById(x);
+                        	cu = cuentadao.getCuentaByIdCliente(cli.getIdcliente());
+                            System.out.println("Cliente: " + cli.getNombre() + " con un saldo de: $" + cu.getBalance());
                         } else {
                             System.out.println("Cliente no registrado");
                         }
@@ -153,38 +165,37 @@ public class App {
                     	lector = new Scanner(System.in);
                         System.out.println("Numero de Cliente:");
                         x = lector.nextInt();
-                        if (b.getCliente(x)!=null) {
+                        if (clientedao.getClienteById(x)!=null) {
+                        	cli = clientedao.getClienteById(x);
+                        	cu = cuentadao.getCuentaByIdCliente(cli.getIdcliente());
+                        	
                         	lector = new Scanner(System.in);
                         	System.out.println("Monto del Deposito:");
                             dinero = lector.nextDouble();
-                            CuentaFactory cF = new CuentaFactory();
-                            CuentaDAO cDAO = cF.getImp(b.getCliente(x).getCuenta());
-                            cDAO.deposito(b.getCliente(x), dinero);
+                            
+                            cuentadao.deposito(cu, dinero);
+                        } else {
+                            System.out.println("Cliente no registrado");
+                        }
+                        break;    
+                    case 6:
+                    	lector = new Scanner(System.in);
+               
+                    	System.out.println("Numero de Cliente:");
+                        x = lector.nextInt();
+                        if (clientedao.getClienteById(x)!=null) {
+                        	cli = clientedao.getClienteById(x);
+                        	cu = cuentadao.getCuentaByIdCliente(cli.getIdcliente());
+                        	
+                        	lector = new Scanner(System.in);
+                        	System.out.println("Monto del Retiro:");
+                            dinero = lector.nextDouble();
+                            
+                            cuentadao.retiro(cu, dinero);
                         } else {
                             System.out.println("Cliente no registrado");
                         }
                         break;
-                    case 6:
-                    	boolean status=false;
-                    	lector = new Scanner(System.in);
-                        System.out.println("Numero de Cliente:");
-                        x = lector.nextInt();
-                        if (b.getCliente(x)!=null) {
-                        	lector = new Scanner(System.in);
-                        	System.out.println("Monto del Retiro:");
-                            dinero = lector.nextDouble();
-                            CuentaFactory cF = new CuentaFactory();
-                            CuentaDAO cDAO = cF.getImp(b.getCliente(x).getCuenta());
-                            status=cDAO.retiro(b.getCliente(x), dinero);
-                            if(status==true){
-                            	System.out.println("Transaccion Exitosa!");
-                            }else{
-                            	System.out.println("Transaccion Cancelada");
-                            }
-                        } else {
-                            System.out.println("Cliente no registrado");
-                        }
-                        break;*/
                     case 0:
                         System.out.println("Hasta Luego!");
                         break;
@@ -196,6 +207,8 @@ public class App {
         } catch (Exception e) {
             System.out.println("Error " + e);
         }
-        
+        //Query query = em.createQuery("select e "+"from Banco e");
+        //List<Banco> list=(List<Banco>)query.getResultList());
+        //ZorroX/SpringBatchDemo.git
     }
 }
