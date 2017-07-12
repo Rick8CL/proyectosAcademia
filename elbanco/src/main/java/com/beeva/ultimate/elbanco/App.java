@@ -47,10 +47,11 @@ public class App {
         bcdao.save(bc);
         */
         
-        cli = clientedao.getClienteById(1);
-        System.out.println(cli.getNombre());
+        //cli = clientedao.getClienteById(1);
+        //System.out.println(cli.getNombre());
         
-        /*
+        
+        
         Scanner lector;
         int opc = 0, x = 0;
         double dinero = 0;
@@ -64,18 +65,27 @@ public class App {
                 opc = lector.nextInt();
                 switch (opc) {
                     case 1:
+                    	cli = new Cliente();
+                    	cu = new Cuenta();
+                    	bc = new BancosClientes();
+                    	int nuevoid;
                     	boolean flag=false;
-                    	
+
                         lector = new Scanner(System.in);
                         System.out.println("Nombre");
                         nom = lector.nextLine();
                         lector = new Scanner(System.in);
                         System.out.println("Apellido");
                         ape = lector.nextLine();
-                        lector = new Scanner(System.in);
                         cli.setNombre(nom);
                         cli.setApellido(ape);
                         clientedao.save(cli);
+                        
+                        nuevoid=cli.getIdcliente();
+                        
+                        System.out.println(nuevoid);
+                        
+                        lector = new Scanner(System.in);
                         System.out.println("Tipo de Cuenta: AHORROS || CHEQUES");
                         tipoCuenta = lector.nextLine().toUpperCase();
                         if(tipoCuenta.equals("AHORROS")){
@@ -87,17 +97,21 @@ public class App {
                         System.out.println("Deposito Inicial:");
                         dinero = lector.nextDouble();
                         cu.setBalance(dinero);
-                        cu.setIdcliente(idcliente);
+                        cu.setIdcliente(nuevoid);
                         cuentadao.save(cu);
                         
-                        System.out.println("Cliente a Agregar");
+                        lector = new Scanner(System.in);
                     	System.out.println("Banco: BANCOMER || BANAMEX");
                         banco = lector.nextLine().toUpperCase();
                         if(banco.equals("BANCOMER")){
-                        	cu.setIdtipocuenta(1);
+                        	bc.setIdbanco(1);
                         }else{
-                        	cu.setIdtipocuenta(2);
+                        	bc.setIdbanco(2);
                         }
+                        bc.setIdcliente(nuevoid);
+                        bcdao.save(bc);
+                        
+                        flag=true;
                         
                         if(flag==true){
                         	System.out.println("Cliente Agregado Exitosamente!");
@@ -105,18 +119,21 @@ public class App {
                         	System.out.println("Fallo el Registro del Cliente");
                         }
                         break;
-                    /*    
+                      
                     case 2:
                         lector = new Scanner(System.in);
-                        System.out.println("No Cliente a Buscar");
+                        System.out.println("# de Cliente a Buscar");
                         x = lector.nextInt();
-                        if (b.getCliente(x)!=null) {
-                            System.out.println("Cliente encontrado: " + b.getCliente(x).getNombre()+" "+b.getCliente(x).getApellido()+" con Cuenta de "+b.getCliente(x).getCuenta().getTipoCuenta());
+                        if (clientedao.getClienteById(x)!=null) {
+                        	cli = clientedao.getClienteById(x);
+                        	cu = cuentadao.getCuentaById(x);
+                        	bc = bcdao.getBancosclientesById(x);
+                            System.out.println("Cliente encontrado: " + cli.getNombre()+" "+cli.getApellido()+" del Banco "+bc.getIdbanco());
                         } else {
                             System.out.println("Cliente no Encontrado");
                         }
                         break;
-                        
+                    /*    
                     case 3:
                         System.out.println("Actualmente hay " + b.getClientes() + " clientes en el banco");
                         break;
@@ -167,7 +184,7 @@ public class App {
                         } else {
                             System.out.println("Cliente no registrado");
                         }
-                        break;
+                        break;*/
                     case 0:
                         System.out.println("Hasta Luego!");
                         break;
@@ -177,8 +194,8 @@ public class App {
                 }
             } while (opc != 0);
         } catch (Exception e) {
-            System.err.println("Error " + e);
+            System.out.println("Error " + e);
         }
-        */
+        
     }
 }

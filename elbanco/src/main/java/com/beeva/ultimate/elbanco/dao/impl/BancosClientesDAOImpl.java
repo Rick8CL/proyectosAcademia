@@ -22,8 +22,9 @@ public class BancosClientesDAOImpl extends BancosClientesDAO {
 	}
 
 	@Override
-	public BancosClientes getBancoById(int id) {
-		return em.find(BancosClientes.class, id);
+	public BancosClientes getBancosclientesById(int id) {
+		BancosClientes bc = (BancosClientes) em.find(BancosClientes.class, id);
+		return bc;
 		
 	}
 

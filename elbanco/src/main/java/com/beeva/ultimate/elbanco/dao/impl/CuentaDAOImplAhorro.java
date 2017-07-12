@@ -6,6 +6,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.beeva.ultimate.elbanco.dao.model.Cliente;
 import com.beeva.ultimate.elbanco.dao.model.Cuenta;
 import com.beeva.ultimate.elbanco.dao.inter.CuentaDAO;
 
@@ -45,7 +46,7 @@ public class CuentaDAOImplAhorro extends CuentaDAO {
 	}
 
 	public Cuenta getCuentaById(int id) {
-		
-		return em.find(Cuenta.class, id);
+		Cuenta cu = (Cuenta) em.find(Cuenta.class, id);
+		return cu;
 	}
 }
