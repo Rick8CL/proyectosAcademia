@@ -14,8 +14,8 @@
     	<property name="puerto" value="27017"/>
     	<property name="dbname" value="testdb"/>
     	<property name="collection" value="user"/>
-    	<property name="nombre" value="Maria"/>
-    	<property name="edad" value="35"/>
+    	<property name="nombre" value="Juan"/>
+    	<property name="edad" value="40"/>
     </bean>
 
 </beans>

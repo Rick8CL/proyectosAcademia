@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.beeva.ultimate.elbanco.MongoUtils;
 import com.beeva.ultimate.elbanco.dao.factory.CuentaFactory;
 import com.beeva.ultimate.elbanco.dao.inter.BancoDAO;
 import com.beeva.ultimate.elbanco.dao.inter.BancosClientesDAO;
@@ -30,6 +31,7 @@ public class App {
         BancosClientesDAO bcdao = (BancosClientesDAO) context.getBean(BancosClientesDAO.class);
         BancoDAO bancodao = (BancoDAO) context.getBean(BancoDAO.class);
         
+        MongoUtils mongo = (MongoUtils) context.getBean("mongoBean");
         
         Cliente cli = new Cliente();
         Cuenta cu = new Cuenta();
@@ -124,6 +126,8 @@ public class App {
                         	cuentadao.save(cu);
                         	bcdao.save(bc);
                         	System.out.println("Cliente Agregado Exitosamente!");
+                        	mongo.insertarCliente(cli.getIdcliente(), cli.getNombre(), cli.getApellido());
+                        	mongo.insertarCuenta(cu.getIdcuenta(), cu.getBalance(), cu.getIdcliente(), cu.getIdtipocuenta());
                         }else{
                         	clientedao.delete(cli.getIdcliente());
                         	System.out.println("Fallo el Registro del Cliente");
@@ -255,8 +259,6 @@ public class App {
             System.out.println("Error " + e);
         }
         
-        //Query query = em.createQuery("select e "+"from Banco e");
-        //List<Banco> list=(List<Banco>)query.getResultList());
         //ZorroX/SpringBatchDemo.git
     }
     

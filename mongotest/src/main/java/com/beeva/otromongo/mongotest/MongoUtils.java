@@ -55,28 +55,20 @@ public class MongoUtils {
 		this.dbname = dbname;
 	}
 
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public int getEdad() {
-		return edad;
-	}
-
-	public void setEdad(int edad) {
-		this.edad = edad;
-	}
-
 	public int getPuerto() {
 		return puerto;
 	}
 
 	public void setPuerto(int puerto) {
 		this.puerto = puerto;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 	public String getCollection() {
@@ -86,6 +78,13 @@ public class MongoUtils {
 	public void setCollection(String collection) {
 		this.collection = collection;
 	}
-	
+
+	public int getEdad() {
+		return edad;
+	}
+
+	public void setEdad(int edad) {
+		this.edad = edad;
+	}
 	
 }

@@ -33,7 +33,11 @@
     	<property name="entityManagerFactory" ref="beanEMF" />
     </bean>
 
-    
+    <bean id="mongoBean" class="com.beeva.ultimate.elbanco.MongoUtils"  init-method="conectar" scope="prototype">
+    	<property name="host" value="127.0.0.1"/>
+    	<property name="puerto" value="27017"/>
+    	<property name="dbname" value="bancodb"/>
+    </bean>
      
   <context:annotation-config />
 
