@@ -32,35 +32,9 @@ public class App {
         
         
         Cliente cli = new Cliente();
-        /*
-        cli.setNombre("Ricardo");
-        cli.setApellido("Castillo");
-        clientedao.save(cli);        
-        */
-        
         Cuenta cu = new Cuenta();
-        /*
-        cu.setBalance(8000);
-        cu.setIdcliente(3);
-        cu.setIdtipocuenta(1);
-        cuentadao.save(cu);        
-        */
-        
-        
         BancosClientes bc = new BancosClientes();
-        /*
-        bc.setIdbanco(1);
-        bc.setIdcliente(1);
-        bcdao.save(bc);
-        */
-
         Banco b = new Banco();
-        
-        //cli = clientedao.getClienteById(1);
-        //System.out.println(cli.getNombre());
-        
-        
-        
         Scanner lector;
         int opc = 0, x = 0;
         double dinero = 0;
@@ -68,10 +42,16 @@ public class App {
 
         try {
             System.out.println("Bienvenido!!! Selecciona una opcion del siguiente menu:");
+            System.out.println("Si no conoces los IDs, te sugerimos la opcion 9");
             do {
                 lector = new Scanner(System.in);
-                System.out.println("\n|-----------------------|\n|1. Agregar Cliente     |\n|2. Buscar Cliente      |\n|3. Cantidad de Clientes|\n|4. Saldo               |\n|5. Deposito            |\n|6. Retiro              |\n|0. Salir               |\n|-----------------------|\n");
-                opc = lector.nextInt();
+                System.out.println("\n|-----------------------|\n|1. Agregar Cliente     |\n|2. Buscar Cliente      |\n|3. Cantidad de Clientes|\n|4. Saldo               |\n|5. Deposito            |\n|6. Retiro              |\n|9. Ver ID de Clientes  |\n|0. Salir               |\n|-----------------------|\n");
+                String v = lector.nextLine();
+                if(isInt(v)){
+                	opc = Integer.parseInt(v);
+                }else{
+                	opc=99;
+                }
                 switch (opc) {
                     case 1:
                     	cli = new Cliente();
@@ -99,41 +79,74 @@ public class App {
                         tipoCuenta = lector.nextLine().toUpperCase();
                         if(tipoCuenta.equals("AHORROS")){
                         	cu.setIdtipocuenta(1);
-                        }else{
+                        }else if(tipoCuenta.equals("CHEQUES")){
                         	cu.setIdtipocuenta(2);
+                        }else{
+                        	System.out.println("Opcion no valida! Transascción cancelada...");
+                        	clientedao.delete(cli.getIdcliente());
+                        	break;
                         }
+                        
                         lector = new Scanner(System.in);
                         System.out.println("Deposito Inicial:");
-                        dinero = lector.nextDouble();
+                        String paso=lector.nextLine();
+                        if(isDouble(paso)){
+                        	dinero = Double.parseDouble(paso);
+                        	cu.setBalance(dinero);
+                            cu.setIdcliente(nuevoid);
+                        }else{
+                        	System.out.println("Error de datos! Transascción cancelada...");
+                        	clientedao.delete(cli.getIdcliente());
+                        	break;
+                        }
+                        
                         cu.setBalance(dinero);
                         cu.setIdcliente(nuevoid);
-                        cuentadao.save(cu);
+                        
                         
                         lector = new Scanner(System.in);
                     	System.out.println("Banco: BANCOMER || BANAMEX");
                         banco = lector.nextLine().toUpperCase();
                         if(banco.equals("BANCOMER")){
                         	bc.setIdbanco(1);
-                        }else{
+                        }else if(banco.equals("BANAMEX")){
                         	bc.setIdbanco(2);
+                        }else{
+                        	clientedao.delete(cli.getIdcliente());
+                        	System.out.println("Opcion no valida! Transascción cancelada...");
+                        	break;
                         }
                         bc.setIdcliente(nuevoid);
-                        bcdao.save(bc);
                         
                         flag=true;
                         
                         if(flag==true){
+                        	cuentadao.save(cu);
+                        	bcdao.save(bc);
                         	System.out.println("Cliente Agregado Exitosamente!");
                         }else{
+                        	clientedao.delete(cli.getIdcliente());
                         	System.out.println("Fallo el Registro del Cliente");
                         }
                         break;
                       
                     case 2:
+                    	cu = new Cuenta();
+                    	bc = new BancosClientes();
                         lector = new Scanner(System.in);
                         System.out.println("# de Cliente a Buscar");
-                        x = lector.nextInt();
+                        
+                        String v2 = lector.nextLine();
+                        if(isInt(v2)){
+                        	x = Integer.parseInt(v2);
+                        }else{
+                        	System.out.println("Error de datos! Transascción cancelada...");
+                        	break;
+                        }
+                        
+                        
                         if (clientedao.getClienteById(x)!=null) {
+                        	System.out.println(clientedao);
                         	cli = clientedao.getClienteById(x);
                         	bc = bcdao.getIdBancoByIdCliente(x);
                         	b = bancodao.getBancoById(bc.getIdbanco());
@@ -151,7 +164,13 @@ public class App {
                     case 4:
                     	lector = new Scanner(System.in);
                     	System.out.println("Numero de Cliente:");
-                        x = lector.nextInt();
+                    	String v3 = lector.nextLine();
+                        if(isInt(v3)){
+                        	x = Integer.parseInt(v3);
+                        }else{
+                        	System.out.println("Error de datos! Transascción cancelada...");
+                        	break;
+                        }
                         if (clientedao.getClienteById(x)!=null) {
                         	cli = clientedao.getClienteById(x);
                         	cu = cuentadao.getCuentaByIdCliente(cli.getIdcliente());
@@ -164,16 +183,29 @@ public class App {
                     case 5:
                     	lector = new Scanner(System.in);
                         System.out.println("Numero de Cliente:");
-                        x = lector.nextInt();
+                        String v4 = lector.nextLine();
+                        if(isInt(v4)){
+                        	x = Integer.parseInt(v4);
+                        }else{
+                        	System.out.println("Error de datos! Transascción cancelada...");
+                        	break;
+                        }
                         if (clientedao.getClienteById(x)!=null) {
                         	cli = clientedao.getClienteById(x);
                         	cu = cuentadao.getCuentaByIdCliente(cli.getIdcliente());
-                        	
-                        	lector = new Scanner(System.in);
-                        	System.out.println("Monto del Deposito:");
-                            dinero = lector.nextDouble();
                             
-                            cuentadao.deposito(cu, dinero);
+                            lector = new Scanner(System.in);
+                            System.out.println("Monto del Deposito:");
+                            String paso2=lector.nextLine();
+                            if(isDouble(paso2)){
+                            	dinero = Double.parseDouble(paso2);
+                            	cuentadao.deposito(cu, dinero);
+                            }else{
+                            	System.out.println("Error de datos! Transascción cancelada...");
+                            	break;
+                            }
+                            
+                            
                         } else {
                             System.out.println("Cliente no registrado");
                         }
@@ -182,20 +214,35 @@ public class App {
                     	lector = new Scanner(System.in);
                
                     	System.out.println("Numero de Cliente:");
-                        x = lector.nextInt();
+                    	String v5 = lector.nextLine();
+                        if(isInt(v5)){
+                        	x = Integer.parseInt(v5);
+                        }else{
+                        	System.out.println("Error de datos! Transascción cancelada...");
+                        	break;
+                        }
                         if (clientedao.getClienteById(x)!=null) {
                         	cli = clientedao.getClienteById(x);
                         	cu = cuentadao.getCuentaByIdCliente(cli.getIdcliente());
                         	
                         	lector = new Scanner(System.in);
-                        	System.out.println("Monto del Retiro:");
-                            dinero = lector.nextDouble();
+                            System.out.println("Monto del Retiro:");
+                            String paso2=lector.nextLine();
+                            if(isDouble(paso2)){
+                            	dinero = Double.parseDouble(paso2);
+                            	cuentadao.retiro(cu, dinero);
+                            }else{
+                            	System.out.println("Error de datos! Transascción cancelada...");
+                            	break;
+                            }
                             
-                            cuentadao.retiro(cu, dinero);
                         } else {
                             System.out.println("Cliente no registrado");
                         }
                         break;
+                    case 9:
+                    	clientedao.getAllClientes();
+                    	break;
                     case 0:
                         System.out.println("Hasta Luego!");
                         break;
@@ -207,8 +254,37 @@ public class App {
         } catch (Exception e) {
             System.out.println("Error " + e);
         }
+        
         //Query query = em.createQuery("select e "+"from Banco e");
         //List<Banco> list=(List<Banco>)query.getResultList());
         //ZorroX/SpringBatchDemo.git
+    }
+    
+    public static boolean isDouble(String d){
+    	boolean flag=false;
+    	double dinero;
+    	try{
+    		dinero = Double.parseDouble(d);
+    		flag = true;
+    		return flag;
+    	}catch(Exception e){
+    		flag=false;
+    		return flag;
+    	}
+    	
+    }
+    
+    public static boolean isInt(String s){
+    	boolean flag=false;
+    	int num;
+    	try{
+    		num = Integer.parseInt(s);
+    		flag = true;
+    		return flag;
+    	}catch(Exception e){
+    		flag=false;
+    		return flag;
+    	}
+    	
     }
 }
