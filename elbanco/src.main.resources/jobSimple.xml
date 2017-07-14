@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:batch="http://www.springframework.org/schema/batch" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/batch
+http://www.springframework.org/schema/batch/spring-batch.xsd
+http://www.springframework.org/schema/util 
+http://www.springframework.org/schema/util/spring-util.xsd">
+	<import resource="classpath:context-core.xml" />
+	<!-- ====== JOB ====== -->
+	<batch:job id="processFileJob" job-repository="jobRepository">
+		<batch:step id="processFileStep1">
+			<batch:tasklet>
+				<batch:chunk reader="itemReaderDB" processor="fileProcess"
+					writer="processFileXMLWriter" commit-interval="2" />
+			</batch:tasklet>
+		</batch:step>
+	</batch:job>
+
+	<!-- ======SQL READER ====== -->
+
+	<bean id="itemReaderDB"
+		class="org.springframework.batch.item.database.JdbcCursorItemReader"
+		scope="step">
+		<property name="dataSource" ref="dataSource" />
+		<property name="sql" value="select nombre, apellido from cliente" />
+		<property name="rowMapper">
+			<bean class="com.beeva.ultimate.elbanco.dao.model.ClienteRowMapper" />
+		</property>
+	</bean>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/bancodb" />
+		<property name="username" value="root" />
+		<property name="password" value="toor" />
+	</bean>
+
+	<!-- ====== FILE READER ====== -->
+
+	<bean id="processFileItemReader" class="org.springframework.batch.item.file.FlatFileItemReader">
+		<property name="resource" value="${input.file}" />
+		<property name="lineMapper" ref="processFileLineMapper" />
+	</bean>
+	<bean id="processFileLineMapper"
+		class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+		<property name="fieldSetMapper" ref="elementAutoFieldSetMapper" />
+		<property name="lineTokenizer" ref="processFileLengthLineTokenizer" />
+	</bean>
+
+	<bean id="processFileLengthLineTokenizer"
+		class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+		<property name="names" value="nombre,apellido,edad,empresa,sitio,area" />
+		<property name="delimiter" value="|" />
+	</bean>
+
+	<bean id="elementAutoFieldSetMapper"
+		class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+		<property name="prototypeBeanName" value="element" />
+	</bean>
+	<bean id="element" class="com.beeva.ultimate.elbanco.dao.model.Procesador"
+		scope="prototype" />
+
+	<!-- ====== WRITER ======== -->
+	<bean id="processFileXMLWriter" class="org.springframework.batch.item.file.FlatFileItemWriter">
+		<property name="resource" value="${output.file}" />
+		<property name="shouldDeleteIfExists" value="true" />
+		<property name="lineAggregator">
+			<bean
+				class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+				<property name="delimiter" value="|" />
+				<property name="fieldExtractor">
+					<bean
+						class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+						<property name="names" value="nombre,apellido" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+
+	</bean>
+</beans>

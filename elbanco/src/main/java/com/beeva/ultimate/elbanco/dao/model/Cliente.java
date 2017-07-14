@@ -1,12 +1,20 @@
 package com.beeva.ultimate.elbanco.dao.model;
 
+/**
+ * Ricardo Castillo Lara
+ * Aplicación para la primer evaluación del Curso de APX
+ * Entrega 14/07/2017
+ * 
+ * Clase POJO para la tabla cliente
+ * Contiene anotaciones para su implementación como Entidad a la BD
+ * 
+ */
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.beeva.ultimate.elbanco.dao.model.Cuenta;
 
 @Entity
 @Table(name="cliente")

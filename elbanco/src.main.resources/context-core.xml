@@ -19,7 +19,7 @@
     <tx:annotation-driven/>
     <bean id="beanConexion" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/bankapp"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/bancodb?useSSL=false"/>
         <property name="username" value="root"/>
         <property name="password" value="toor"/>
     </bean>
@@ -36,7 +36,24 @@
     <bean id="mongoBean" class="com.beeva.ultimate.elbanco.MongoUtils"  init-method="conectar" scope="prototype">
     	<property name="host" value="127.0.0.1"/>
     	<property name="puerto" value="27017"/>
-    	<property name="dbname" value="bancodb"/>
+    	<property name="dbname" value="bancolog"/>
+    </bean>
+     
+     
+<context:property-placeholder location="classpath:file.properties"/>
+<context:component-scan base-package="com.beeva.ultimate"/>
+
+  <!-- Repositorio de jobs en memoria -->
+    <bean id="jobRepository"
+          class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
+        <property name="transactionManager" ref="transactionManager2"/>
+    </bean>
+    <bean id="transactionManager2"
+          class="org.springframework.batch.support.transaction.ResourcelessTransactionManager"/>
+          
+      <bean id="jobLauncher"
+          class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+        <property name="jobRepository" ref="jobRepository"/>
     </bean>
      
   <context:annotation-config />

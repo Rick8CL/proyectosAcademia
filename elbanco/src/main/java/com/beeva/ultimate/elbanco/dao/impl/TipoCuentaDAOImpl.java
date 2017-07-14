@@ -22,24 +22,24 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.beeva.ultimate.elbanco.dao.inter.BancoDAO;
-import com.beeva.ultimate.elbanco.dao.model.Banco;
+import com.beeva.ultimate.elbanco.dao.inter.TipoCuentaDAO;
+import com.beeva.ultimate.elbanco.dao.model.TipoCuenta;
 
 @Repository
-public class BancoDAOImpl extends BancoDAO {
+public class TipoCuentaDAOImpl extends TipoCuentaDAO {
 	@PersistenceContext
 	EntityManager em;
 
 	@Override
 	@Transactional
-	public void save(Banco banco) {
-		em.persist(banco);
+	public void save(TipoCuenta tc) {
+		em.persist(tc);
 		
 	}
 
 	@Override
-	public Banco getBancoById(int id) {
-		return em.find(Banco.class, id);
+	public TipoCuenta getTipoCuentaById(int id) {
+		return em.find(TipoCuenta.class, id);
 		
 	}
 

@@ -8,5 +8,7 @@
         <class>com.beeva.ultimate.elbanco.dao.model.Cuenta</class>
         <class>com.beeva.ultimate.elbanco.dao.model.Cliente</class>
         <class>com.beeva.ultimate.elbanco.dao.model.Banco</class>
+        <class>com.beeva.ultimate.elbanco.dao.model.BancosClientes</class>
+        <class>com.beeva.ultimate.elbanco.dao.model.TipoCuenta</class>
     </persistence-unit>
 </persistence>

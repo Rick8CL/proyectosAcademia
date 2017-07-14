@@ -5,7 +5,7 @@ package com.beeva.ultimate.elbanco.dao.model;
  * Aplicación para la primer evaluación del Curso de APX
  * Entrega 14/07/2017
  * 
- * Clase POJO para la tabla banco
+ * Clase POJO para la tabla tipocuenta
  * Contiene anotaciones para su implementación como Entidad a la BD
  * 
  */
@@ -17,20 +17,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="banco")
-public class Banco {
+@Table(name="tipocuenta")
+public class TipoCuenta {
 
-    private int idbanco;
+    private int idtipocuenta;
 	private String nombre;
     
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-    public int getIdbanco() {
-		return idbanco;
+    public int getIdtipocuenta() {
+		return idtipocuenta;
 	}
 
-	public void setIdbanco(int idbanco) {
-		this.idbanco = idbanco;
+	public void setIdtipocuenta(int idtipocuenta) {
+		this.idtipocuenta = idtipocuenta;
 	}
 
 	public String getNombre() {

@@ -1,5 +1,17 @@
 package com.beeva.ultimate.elbanco;
 
+/**
+ * Ricardo Castillo Lara
+ * Aplicación para la primer evaluación del Curso de APX
+ * Entrega 14/07/2017
+ * 
+ * Conexión con MongoDB, recicbe los parámetros para establecer dicha conexión.
+ * Cuenta con un método que se ejecuta cada que se agrega exitosamente un cliente
+ * o una cuenta, genera/usa una base de datos, genera/usa una colección, ya sea de tipo
+ * cliente o cuenta, y añade el documento de dicha inserción.
+ * 
+ */
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -21,7 +33,7 @@ public class MongoUtils {
 		}
 	}
 	
-	public void insertarCliente(int idcliente, String nombre, String apellido){
+	public void insertarCliente(int idcliente, String nombre, String apellido, String fecha){
 		conectar();
 		DB db = mc.getDB(dbname);
 		DBCollection table = db.getCollection("clientes");
@@ -29,11 +41,12 @@ public class MongoUtils {
 		document.put("idcliente", idcliente);
 		document.put("nombre", nombre);
 		document.put("apellido", apellido);
+		document.put("fecha", fecha);
 		table.insert(document);
 		System.out.println("Cliente insertado a MongoDB");
 	}
 	
-	public void insertarCuenta(int idcuenta, double balance, int idcliente, int idtipocuenta){
+	public void insertarCuenta(int idcuenta, double balance, int idcliente, int idtipocuenta, String fecha){
 		conectar();
 		DB db = mc.getDB(dbname);
 		DBCollection table = db.getCollection("cuentas");
@@ -42,6 +55,7 @@ public class MongoUtils {
 		document.put("balance", balance);
 		document.put("idcliente", idcliente);
 		document.put("idtipocuenta", idtipocuenta);
+		document.put("fecha", fecha);
 		table.insert(document);
 		System.out.println("Cuenta insertada a MongoDB");
 	}
