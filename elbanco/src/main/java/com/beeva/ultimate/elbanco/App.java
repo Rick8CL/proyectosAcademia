@@ -18,12 +18,17 @@ package com.beeva.ultimate.elbanco;
  * 
  */
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.kie.api.KieServices;
+import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -65,28 +70,28 @@ public class App {
         TipoCuenta tc = new TipoCuenta();
         
         //Agregamos manualmente los Bancos y los Tipos de Cuenta
-        if(bancodao.getBancoById(1).equals(null)){
+        if(bancodao.getBancoById(1)==(null)){
         	b = new Banco();
             b.setNombre("BANCOMER");        
             bancodao.save(b);
         }else{
         	System.out.println("Ya existe el banco "+bancodao.getBancoById(1).getNombre());
         }
-        if(bancodao.getBancoById(2).equals(null)){
+        if(bancodao.getBancoById(2)==(null)){
         	b = new Banco();
             b.setNombre("BANAMEX");
             bancodao.save(b);
     	}else{
         	System.out.println("Ya existe el banco "+bancodao.getBancoById(2).getNombre());
         }
-        if(tipocuentadao.getTipoCuentaById(1).equals(null)){
+        if(tipocuentadao.getTipoCuentaById(1)==(null)){
         	tc = new TipoCuenta();
             tc.setNombre("AHORROS");
             tipocuentadao.save(tc);
         }else{
         	System.out.println("Ya existe el tipo de cuenta "+tipocuentadao.getTipoCuentaById(1).getNombre());
         }
-        if(tipocuentadao.getTipoCuentaById(2).equals(null)){
+        if(tipocuentadao.getTipoCuentaById(2)==(null)){
         	tc = new TipoCuenta();
             tc.setNombre("CHEQUES");
             tipocuentadao.save(tc);
@@ -192,7 +197,9 @@ public class App {
                         
                         if(flag==true){
                         	Date hoy = new Date();
-                        	String fecha = hoy.getDay()+"/"+hoy.getMonth()+"/"+(hoy.getYear()+1900)+" "+hoy.getHours()+":"+hoy.getMinutes()+":"+hoy.getSeconds();
+                        	SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                        	String fecha = formato.format(hoy);
+                        	System.out.println(fecha);
                         	cuentadao.save(cu);
                         	bcdao.save(bc);
                         	System.out.println("Cliente Agregado Exitosamente!");
@@ -220,7 +227,6 @@ public class App {
                         
                         
                         if (clientedao.getClienteById(x)!=null) {
-                        	System.out.println(clientedao);
                         	cli = clientedao.getClienteById(x);
                         	bc = bcdao.getIdBancoByIdCliente(x);
                         	b = bancodao.getBancoById(bc.getIdbanco());
@@ -246,7 +252,6 @@ public class App {
                         
                         
                         if (clientedao.getClienteById(x)!=null) {
-                        	System.out.println(clientedao);
                         	cli = clientedao.getClienteById(x);
                         	bc = bcdao.getIdBancoByIdCliente(x);
                         	b = bancodao.getBancoById(bc.getIdbanco());
@@ -254,7 +259,6 @@ public class App {
                             
                             System.out.println("Generando nueva cuenta...");
                             int nuevoid2=cli.getIdcliente();
-                            //////////////////////////////////////////////////////////
                             
                             lector = new Scanner(System.in);
                             System.out.println("Tipo de Cuenta: AHORROS || CHEQUES");
@@ -289,7 +293,9 @@ public class App {
                             if(flag==true){
                             	cuentadao.save(cu);
                             	Date hoy = new Date();
-                            	String fecha = hoy.getDay()+"/"+hoy.getMonth()+"/"+(hoy.getYear()+1900)+" "+hoy.getHours()+":"+hoy.getMinutes()+":"+hoy.getSeconds();
+                            	SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                            	String fecha = formato.format(hoy);
+                            	System.out.println(fecha);
                             	System.out.println("Nueva Cuenta Agregada Exitosamente!");
                             	mongo.insertarCuenta(cu.getIdcuenta(), cu.getBalance(), cu.getIdcliente(), cu.getIdtipocuenta(), fecha);
                             }else{
@@ -358,12 +364,13 @@ public class App {
                         break;
                         
                     case 6:
-                    	List<Cuenta> listd;
+                    	cu = new Cuenta();
+                    	List<Cuenta> listdd;
                     	lector = new Scanner(System.in);
                         System.out.println("Numero de Cliente:");
-                        String v4 = lector.nextLine();
-                        if(isInt(v4)){
-                        	x = Integer.parseInt(v4);
+                        String v0 = lector.nextLine();
+                        if(isInt(v0)){
+                        	x = Integer.parseInt(v0);
                         }else{
                         	System.out.println("Error de datos! Transascción cancelada...");
                         	break;
@@ -371,7 +378,7 @@ public class App {
                         if (clientedao.getClienteById(x)!=null) {
                         	cli = clientedao.getClienteById(x);
                         	System.out.println(cli.getNombre()+" Estas son tus cuentas disponibles: ");
-                        	listd=cuentadao.getCuentasByCliente(x);
+                        	listdd=cuentadao.getCuentasByCliente(x);
                         	
                         	int y;
                         	lector = new Scanner(System.in);
@@ -385,8 +392,8 @@ public class App {
                             }
                         	
                             boolean estuya=false;
-                            for(int k=0;k<listd.size();k++){
-                        		int w = listd.get(k).getIdcuenta();
+                            for(int k=0;k<listdd.size();k++){
+                        		int w = listdd.get(k).getIdcuenta();
                         		
                         		if(y==w){
                         			cu = cuentadao.getCuentaById(y);
@@ -404,7 +411,37 @@ public class App {
                                 if(isDouble(paso2)){
                                 	dinero = Double.parseDouble(paso2);
                                 	if(dinero>0){
-                                		cuentadao.deposito(cu, dinero);
+                                		try{
+                                			String tcuenta;
+                                        	KieServices ks = KieServices.Factory.get();
+                                        	KieContainer kContainer = ks.getKieClasspathContainer();
+                                        	KieSession kSession = kContainer.newKieSession("ksession-rules");
+                                        	
+                                        	Drool drool = new Drool();
+                                        	drool.setDeposito(dinero);
+                                        	drool.setSaldo(cu.getBalance());
+                                        	if(cu.getIdtipocuenta()==1){
+                                        		tcuenta="AHORROS";
+                                        	}else if(cu.getIdtipocuenta()==2){
+                                        		tcuenta="CHEQUES";
+                                        	}else{
+                                        		tcuenta="";
+                                        	}
+                                        	drool.setTipocuenta(tcuenta);
+
+                                			FactHandle fact1;
+                                        	       	
+                                        	fact1 = kSession.insert(drool);
+                                        	kSession.fireAllRules();
+                                        	cuentadao.deposito(cu, dinero);
+                                        	if(drool.getSospecha()==null){
+                                        		System.out.println("Drool dice: Deposito listo!");
+                                        	}else{
+                                        		System.out.println("Drool dice: "+drool.getSospecha());
+                                        	}
+                                        }catch(Exception t){
+                                        	t.printStackTrace();
+                                        }
                                 	}else{
                                 		System.out.println("Cantidad inválida! Transascción cancelada...");
                                     	break;
@@ -434,7 +471,7 @@ public class App {
                         if (clientedao.getClienteById(x)!=null) {
                         	cli = clientedao.getClienteById(x);
                         	System.out.println(cli.getNombre()+" Estas son tus cuentas disponibles: ");
-                        	listd=cuentadao.getCuentasByCliente(x);
+                        	listr=cuentadao.getCuentasByCliente(x);
                         	
                         	int y;
                         	lector = new Scanner(System.in);
@@ -448,8 +485,8 @@ public class App {
                             }
                         	
                             boolean estuya=false;
-                            for(int k=0;k<listd.size();k++){
-                        		int w = listd.get(k).getIdcuenta();
+                            for(int k=0;k<listr.size();k++){
+                        		int w = listr.get(k).getIdcuenta();
                         		
                         		if(y==w){
                         			cu = cuentadao.getCuentaById(y);
@@ -468,6 +505,7 @@ public class App {
                                 	dinero = Double.parseDouble(paso2);
                                 	if(dinero>0){
                                 		cuentadao.retiro(cu, dinero);
+                                		System.out.println("Saldo actual "+cu.getBalance());
                                 	}else{
                                 		System.out.println("Cantidad inválida! Transascción cancelada...");
                                     	break;
@@ -485,7 +523,11 @@ public class App {
                         break;
                     case 8:
                     	System.out.println("Zona de pruebas");
-                    	
+                    	Date hoy = new Date();
+                    	SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                    	String fecha = formato.format(hoy);
+                    	System.out.println(fecha);
+
                     	break;
                     case 9:
                     	clientedao.getAllClientes();

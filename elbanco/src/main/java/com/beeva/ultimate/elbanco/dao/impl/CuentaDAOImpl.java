@@ -32,7 +32,7 @@ import com.beeva.ultimate.elbanco.dao.model.Cuenta;
 import com.beeva.ultimate.elbanco.dao.inter.CuentaDAO;
 
 @Repository
-public class CuentaDAOImplAhorro extends CuentaDAO {
+public class CuentaDAOImpl extends CuentaDAO {
 
 	@PersistenceContext
 	EntityManager em;
@@ -92,7 +92,6 @@ public class CuentaDAOImplAhorro extends CuentaDAO {
 			double saldo=cuenta.getBalance();
 			System.out.println("Al saldo anterior "+saldo);
 			saldo = saldo - dinero;
-			System.out.println("Saldo despues del deposito "+saldo);
 			if(saldo<5000){
 				System.out.println("No puedes tener menos de $5000");
 				flag=false;
@@ -120,7 +119,6 @@ public class CuentaDAOImplAhorro extends CuentaDAO {
 			}else{
 				System.out.println("Al saldo anterior "+saldo);
 				saldo = saldo - dinero;
-				System.out.println("Saldo despues del deposito "+saldo);
 				cuenta.setBalance(saldo);
 				em.merge(cuenta);
 				flag=true;
